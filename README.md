@@ -13,3 +13,13 @@ from www.commodore.gen.tr
 sudo sh ./m68k-amigaos-gcc-setup
 ~~~~
 
+# Compile MUI Project
+Do not forget add lines your source code to compile MUI project for Amiga OS 3.X with MUI3.8
+~~~~ c
+/* Otherwise auto open will try version 37, and muimaster.library has version
+ * 19.x for MUI 3.8 */
+int __oslibversion = 0;
+
+/* We don't use command line arguments. */
+int __nocommandline = 1;
+~~~~
