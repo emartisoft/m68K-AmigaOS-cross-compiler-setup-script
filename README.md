@@ -8,3 +8,8 @@ Special Thanks to: <br>
 @Simon [https://github.com/ozayturay] <br>
 from www.commodore.gen.tr
 
+# Usage
+~~~~ bash
+sudo sh ./m68k-amigaos-gcc-setup
+~~~~
+
