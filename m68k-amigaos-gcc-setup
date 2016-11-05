@@ -70,7 +70,7 @@ do_compile()
 	export PATH=/opt/m68k-amigaos/bin:$PATH	
 }
 
-# Support 32 bit architecture
+# Support 32 bit architecture for x64
 do_install_32bit_support() {
     	apt-get install gcc-multilib
 	dpkg --add-architecture i386
@@ -138,9 +138,9 @@ do_exit()
 # download and compile Amigaos-cross-toolchain
 do_install()
 {
-	do_compile
-	do_add_bashrc
 	do_install_32bit_support
+	do_compile
+	do_add_bashrc	
 	do_copy_mui
 	do_install_lha
 	do_flexible_catalog
