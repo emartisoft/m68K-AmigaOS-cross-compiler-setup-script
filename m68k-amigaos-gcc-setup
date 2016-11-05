@@ -58,7 +58,7 @@ do_preinstallation()
 # compile amigaos-cross-toolchain
 do_compile()
 {
-	mkdir $amigadevFolder
+	mkdir -p $amigadevFolder
 	cd $amigadevFolder
 	git clone $amigadevURL
 	cd amigaos-cross-toolchain
