@@ -1,0 +1,188 @@
+#!/bin/sh
+# Part of m68k-amigaos-gcc-ubuntu-setup https://github.com/emartisoft/m68k-amigaos-gcc-ubuntu-setup
+# Written by emarti, Murat Özdemir
+# Special Thanks to @Alpyre and @Simon from www.commodore.gen.tr
+# See LICENSE file for copyright and license details
+
+# Change the line below to define your own install folder
+amigadevFolder=$HOME/Development/AmigaDev
+
+amigadevURL=git://github.com/cahirwpz/amigaos-cross-toolchain.git
+
+calc_wt_size() 
+{
+  WT_HEIGHT=15
+  WT_WIDTH=$(tput cols)
+  
+  if [ -z "$WT_WIDTH" ] || [ "$WT_WIDTH" -lt 60 ]; then
+    WT_WIDTH=80
+  fi
+  if [ "$WT_WIDTH" -gt 178 ]; then
+    WT_WIDTH=120
+  fi
+  WT_MENU_HEIGHT=$(($WT_HEIGHT-7))
+}
+
+# About
+do_about()
+{
+  whiptail --title "About" --msgbox "\
+m68k Amiga OS 3.X gcc Setup Script \
+==================================
+Compile your Amiga OS 3.X C project \
+
+on Linux platform (Ubuntu) \
+
+via AmigaOS cross compiler \
+
+[https://github.com/cahirwpz/amigaos-cross-toolchain] 
+
+Special Thanks to @Alpyre [https://github.com/alpyre] and @Simon [https://github.com/ozayturay] from www.commodore.gen.tr \
+
+
+Created by emarti, Murat ÖZDEMİR \
+
+
+Visit https://github.com/emartisoft/ for the latest in this project.\
+
+Stay with Amiga :)
+  " 20 70 1
+}
+
+# Install extra packages (dependencies and some useful tools)
+do_preinstallation()
+{
+	apt-get -y update && apt-get -y install libncurses-dev python-dev patch gperf bison git 
+}
+
+# compile amigaos-cross-toolchain
+do_compile()
+{
+	mkdir $amigadevFolder
+	cd $amigadevFolder
+	git clone $amigadevURL
+	cd amigaos-cross-toolchain
+
+	chmod a+w /opt
+	./toolchain-m68k --prefix=/opt/m68k-amigaos build
+	./toolchain-m68k --prefix=/opt/m68k-amigaos install-sdk ahi cgx mui
+	
+	export PATH=/opt/m68k-amigaos/bin:$PATH	
+}
+
+# Support 32 bit architecture
+do_install_32bit_support() {
+    	apt-get install gcc-multilib
+	dpkg --add-architecture i386
+	apt-get update
+	apt-get dist-upgrade		
+}
+
+# gcc test
+do_test()
+{
+	clear
+	echo "========================================="
+	echo "= m68k-amigaos-gcc test                 ="
+  	echo "========================================="
+	export PATH=/opt/m68k-amigaos/bin:$PATH	
+	m68k-amigaos-gcc -v
+	echo "========================================="
+	echo "Wait for 5 seconds..."
+	sleep 5
+}
+
+# add m68k AmigaOS gcc binaries to .bashrc
+do_add_bashrc()
+{
+	echo "# m68k AmigaOS gcc binaries" >> ~/.bashrc
+	echo "export PATH=/opt/m68k-amigaos/bin:$PATH" >> ~/.bashrc
+}  
+
+# ld: cannot open -lmui: No such file or directory
+do_copy_mui()
+{
+	cp /opt/m68k-amigaos/m68k-amigaos/libnix/lib/libmui.a /opt/m68k-amigaos/lib/gcc-lib/m68k-amigaos/2.95.3/
+	cp /opt/m68k-amigaos/m68k-amigaos/libnix/lib/libdebug.a /opt/m68k-amigaos/lib/gcc-lib/m68k-amigaos/2.95.3/
+}
+
+# Amiga LhA
+do_install_lha()
+{
+	apt-get install jlha-utils
+}
+
+# Amiga LhA
+do_install_lha_from_menu()
+{
+	apt-get install jlha-utils
+	sleep 5
+}
+
+# Flexible catalogs for Amiga
+do_flexible_catalog()
+{
+	wget aminet.net/dev/misc/FlexCat-2.18.lha
+	lha -e FlexCat-2.18.lha FlexCat/Linux-i386/flexcat
+	chmod a+x FlexCat/Linux-i386/flexcat
+	cp FlexCat/Linux-i386/flexcat /opt/m68k-amigaos/bin/
+	rm –r FlexCat FlexCat-2.18.lha
+}
+
+# Return to terminal
+do_exit()
+{
+  exit 1
+}
+
+# download and compile Amigaos-cross-toolchain
+do_install()
+{
+	do_compile
+	do_add_bashrc
+	do_install_32bit_support
+	do_copy_mui
+	do_install_lha
+	do_flexible_catalog
+	chmod u-w /opt
+}
+
+# You are not root :)
+if [ $(id -u) -ne 0 ]; then
+  printf "Script must be run as root. Try 'sudo sh ./m68k-amigaos-gcc-setup'\n"
+  exit 1
+fi
+
+# whiptail?
+if [ $(dpkg-query -W -f='${Status}\n' whiptail | grep -c "ok installed") -eq 0 ]; then
+	echo "Required packages not found, installing them now..."
+	apt-get update && apt-get -y install whiptail lua5.2
+fi
+ 
+calc_wt_size
+
+while true; do
+	FUN=$(whiptail --title "m68k Amiga OS 3.X gcc Setup for Ubuntu 16.04 LTS" --menu "Setup Options" $WT_HEIGHT $WT_WIDTH $WT_MENU_HEIGHT --cancel-button Finish --ok-button Select \
+	  "1 Pre-installation" "Requirements" \
+	  "2 Install" "Download & compile Amigaos-cross-toolchain" \
+	  "3 GCC Test" "m68k-amigaos-gcc –v" \
+	  "4 Amiga LhA" "Install Amiga LhA" \
+	  "5 About this script" "Information about this script" \
+	  "6 Exit" "Return to terminal" \
+	  3>&1 1>&2 2>&3)
+	RET=$?
+	if [ $RET -eq 0 ]; then
+	  case "$FUN" in
+		1\ *) do_preinstallation ;;
+		2\ *) do_install ;;
+		3\ *) do_test ;;
+		4\ *) do_install_lha_from_menu ;;
+		5\ *) do_about ;;
+		6\ *) do_exit ;;
+		*) whiptail --msgbox "Programmer error: unrecognized option" 20 60 1 ;;
+	  esac || whiptail --msgbox "There was an error running option $FUN" 20 60 1
+	else
+	  exit 1
+	fi
+done
+
