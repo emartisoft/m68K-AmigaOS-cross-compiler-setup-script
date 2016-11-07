@@ -1,5 +1,5 @@
 #!/bin/sh
-# Part of m68k-amigaos-gcc-ubuntu-setup https://github.com/emartisoft/m68k-amigaos-gcc-ubuntu-setup
+# https://github.com/emartisoft/m68K-AmigaOS-cross-compiler-setup-script
 # Written by emarti, Murat Özdemir
 # Special Thanks to @Alpyre and @Simon from www.commodore.gen.tr
 # See LICENSE file for copyright and license details
@@ -27,11 +27,11 @@ calc_wt_size()
 do_about()
 {
   whiptail --title "About" --msgbox "\
-m68k Amiga OS 3.X gcc Setup Script \
-==================================
+m68K AmigaOS Cross Compiler Setup Script \
+========================================
 Compile your Amiga OS 3.X C project \
 
-on Linux platform (Ubuntu) \
+on Ubuntu (may be other debian based distrubution) \
 
 via AmigaOS cross compiler \
 
@@ -83,7 +83,7 @@ do_test()
 {
 	clear
 	echo "========================================="
-	echo "= m68k-amigaos-gcc test                 ="
+	echo "=         m68k-amigaos-gcc test         ="
   	echo "========================================="
 	export PATH=/opt/m68k-amigaos/bin:$PATH	
 	m68k-amigaos-gcc -v
@@ -170,11 +170,11 @@ fi
 calc_wt_size
 
 while true; do
-	FUN=$(whiptail --title "m68k Amiga OS 3.X gcc Setup for Ubuntu 16.04 LTS" --menu "Setup Options" $WT_HEIGHT $WT_WIDTH $WT_MENU_HEIGHT --cancel-button Finish --ok-button Select \
+	FUN=$(whiptail --title "m68K AmigaOS Cross Compiler Setup" --menu "Setup Options" $WT_HEIGHT $WT_WIDTH $WT_MENU_HEIGHT --cancel-button Finish --ok-button Select \
 	  "1 Pre-installation" "Requirements" \
 	  "2 Install" "Download & compile Amigaos-cross-toolchain" \
 	  "3 GCC Test" "m68k-amigaos-gcc –v" \
-	  "4 Amiga LhA" "Install Amiga LhA" \
+	  "4 LhA for Linux" "Install Amiga LhA on Linux" \
 	  "5 About this script" "Information about this script" \
 	  "6 Exit" "Return to terminal" \
 	  3>&1 1>&2 2>&3)
