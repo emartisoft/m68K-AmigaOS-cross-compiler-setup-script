@@ -12,7 +12,7 @@ amigadevURL=git://github.com/cahirwpz/amigaos-cross-toolchain.git
 calc_wt_size() 
 {
   WT_HEIGHT=15
-  WT_WIDTH=$(tput cols)
+  WT_WIDTH=$(tput $(cols)-2)
   
   if [ -z "$WT_WIDTH" ] || [ "$WT_WIDTH" -lt 60 ]; then
     WT_WIDTH=80
@@ -29,24 +29,29 @@ do_about()
   whiptail --title "About" --msgbox "\
 m68K AmigaOS Cross Compiler Setup Script \
 ========================================
-Compile your Amiga OS 3.X C project \
+On Ubuntu (may be other debian based distrubution) \
 
-on Ubuntu (may be other debian based distrubution) \
-
-via AmigaOS cross compiler \
+to easy setup AmigaOS cross compiler \
 
 [https://github.com/cahirwpz/amigaos-cross-toolchain] 
 
-Special Thanks to @Alpyre [https://github.com/alpyre] and @Simon [https://github.com/ozayturay] from www.commodore.gen.tr \
+Special Thanks: \
+
+ @Alpyre [https://github.com/alpyre] \
+
+ @Simon [https://github.com/ozayturay] \
+
 
 
 Created by emarti, Murat ÖZDEMİR \
 
 
-Visit https://github.com/emartisoft/ for the latest in this project.\
+Visit https://github.com/emartisoft/ \
+
+for the latest in this project.\
 
 Stay with Amiga :)
-  " 20 70 1
+  " 24 60 1
 }
 
 # Install extra packages (dependencies and some useful tools)
@@ -82,12 +87,12 @@ do_install_32bit_support() {
 do_test()
 {
 	clear
-	echo "========================================="
-	echo "=         m68k-amigaos-gcc test         ="
-  	echo "========================================="
+	echo "=================================================================================="
+	echo "=         m68k-amigaos-gcc test                                                  ="
+  	echo "=================================================================================="
 	export PATH=/opt/m68k-amigaos/bin:$PATH	
 	m68k-amigaos-gcc -v
-	echo "========================================="
+	echo "=================================================================================="
 	echo "Wait for 5 seconds..."
 	sleep 5
 }
@@ -175,7 +180,7 @@ while true; do
 	  "2 Install" "Download & compile Amigaos-cross-toolchain" \
 	  "3 GCC Test" "m68k-amigaos-gcc –v" \
 	  "4 LhA for Linux" "Install Amiga LhA on Linux" \
-	  "5 About this script" "Information about this script" \
+	  "5 About" "Information about this script" \
 	  "6 Exit" "Return to terminal" \
 	  3>&1 1>&2 2>&3)
 	RET=$?
