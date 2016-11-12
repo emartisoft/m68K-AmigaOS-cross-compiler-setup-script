@@ -12,7 +12,7 @@ amigadevURL=git://github.com/cahirwpz/amigaos-cross-toolchain.git
 calc_wt_size() 
 {
   WT_HEIGHT=15
-  WT_WIDTH=$(tput $(cols)-2)
+  WT_WIDTH=$(tput cols)
   
   if [ -z "$WT_WIDTH" ] || [ "$WT_WIDTH" -lt 60 ]; then
     WT_WIDTH=80
