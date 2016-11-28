@@ -77,10 +77,10 @@ do_compile()
 
 # Support 32 bit architecture for x64
 do_install_32bit_support() {
-    	apt-get install gcc-multilib
+    	apt-get install gcc-multilib -y
 	dpkg --add-architecture i386
-	apt-get update
-	apt-get dist-upgrade		
+	apt-get -y update
+	apt-get -y dist-upgrade		
 }
 
 # gcc test
@@ -114,13 +114,13 @@ do_copy_mui()
 # Amiga LhA
 do_install_lha()
 {
-	apt-get install jlha-utils
+	apt-get install jlha-utils -y
 }
 
 # Amiga LhA
 do_install_lha_from_menu()
 {
-	apt-get install jlha-utils
+	apt-get install jlha-utils -y
 	sleep 5
 }
 
@@ -169,7 +169,7 @@ fi
 # whiptail?
 if [ $(dpkg-query -W -f='${Status}\n' whiptail | grep -c "ok installed") -eq 0 ]; then
 	echo "Required packages not found, installing them now..."
-	apt-get update && apt-get -y install whiptail lua5.2
+	apt-get -y update && apt-get -y install whiptail lua5.2
 fi
  
 calc_wt_size
