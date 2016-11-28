@@ -68,7 +68,7 @@ do_compile()
 	git clone $amigadevURL
 	cd amigaos-cross-toolchain
 
-	chmod a+w /opt
+	chmod -R u+w /opt
 	./toolchain-m68k --prefix=/opt/m68k-amigaos build
 	./toolchain-m68k --prefix=/opt/m68k-amigaos install-sdk ahi cgx mui
 	
@@ -157,12 +157,12 @@ do_install()
 	do_mui38dev_header	
 	do_copy_mui
 	do_flexible_catalog
-	chmod u-w /opt
+	chmod -R u-w /opt
 }
 
 # You are not root :)
 if [ $(id -u) -ne 0 ]; then
-  printf "Script must be run as root. Try 'sudo sh ./m68k-amigaos-gcc-setup'\n"
+  printf "Script must be run as root. Try 'chmod +x m68k-amigaos-gcc-setup' and then 'sudo ./m68k-amigaos-gcc-setup'\n"
   exit 1
 fi
 
