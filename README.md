@@ -8,7 +8,8 @@ from www.commodore.gen.tr
 
 # Usage
 ~~~~ bash
-sudo sh ./m68k-amigaos-gcc-setup
+chmod +x m68k-amigaos-gcc-setup
+sudo ./m68k-amigaos-gcc-setup
 ~~~~
 
 # Compile MUI Project
