@@ -5,7 +5,7 @@
 # See LICENSE file for copyright and license details
 
 # Change the line below to define your own install folder
-amigadevFolder=$HOME/Development/AmigaDev
+amigadevFolder=$HOME/AmigaDev
 
 amigadevURL=git://github.com/cahirwpz/amigaos-cross-toolchain.git
 
@@ -68,7 +68,7 @@ do_compile()
 	git clone $amigadevURL
 	cd amigaos-cross-toolchain
 
-	chmod -R u+w /opt
+	chmod -R 777 /opt
 	./toolchain-m68k --prefix=/opt/m68k-amigaos build
 	./toolchain-m68k --prefix=/opt/m68k-amigaos install-sdk ahi cgx mui
 	
