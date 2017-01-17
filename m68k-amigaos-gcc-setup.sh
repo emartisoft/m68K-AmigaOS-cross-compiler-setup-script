@@ -8,7 +8,7 @@
 # Change the line below to define your own install folder
 amigadevFolder=$HOME/AmigaDev
 
-amigadevURL=git://github.com/cahirwpz/amigaos-cross-toolchain.git
+amigadevURL=https://github.com/cahirwpz/amigaos-cross-toolchain.git
 
 calc_wt_size() 
 {
